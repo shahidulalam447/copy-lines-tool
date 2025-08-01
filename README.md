@@ -16,4 +16,7 @@ A simple web tool that allows you to input multiline text, then generate a copy 
 
 ## 🚀 Live Demo
 
-👉 **[Click here to use the tool](https://shahidulalam447.github.io/copy-lines-tool/)**  
+<a href="https://shahidulalam447.github.io/copy-lines-tool/" target="_blank" rel="noopener noreferrer">
+  👉 <strong>Click here to use the tool</strong>
+</a>
+
