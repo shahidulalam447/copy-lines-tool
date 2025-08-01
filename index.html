@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Copy Each Line Individually</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 30px;
+      background: #f9f9f9;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-size: 16px;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    button {
+      margin: 5px 5px 5px 0;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .line-buttons {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Copy Each Line Individually</h2>
+  <textarea id="inputText" placeholder="Write lines here..."></textarea>
+  <br>
+  <button onclick="generateLineButtons()">Generate Copy Buttons</button>
+
+  <div class="line-buttons" id="buttonsContainer"></div>
+
+  <script>
+    function generateLineButtons() {
+      const input = document.getElementById("inputText").value;
+      const lines = input.split('\n').filter(line => line.trim() !== '');
+      const container = document.getElementById("buttonsContainer");
+
+      container.innerHTML = ''; // Clear previous buttons
+
+      lines.forEach((line, index) => {
+        const btn = document.createElement("button");
+        btn.textContent = `Copy Line ${index + 1}`;
+        btn.onclick = () => {
+          navigator.clipboard.writeText(line).then(() => {
+            btn.textContent = `Copied ✔`;
+            setTimeout(() => {
+              btn.textContent = `Copy Line ${index + 1}`;
+            }, 1000);
+          });
+        };
+        container.appendChild(btn);
+      });
+    }
+  </script>
+
+</body>
+</html>
