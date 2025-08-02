@@ -43,21 +43,31 @@
       gap: 10px;
     }
 
-    button {
-      padding: 10px 12px;
+    .top-buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .top-buttons button {
+      padding: 8px 12px;
       font-size: 16px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       transition: 0.2s;
-      width: 200px;           /* Smaller fixed width */
-      flex: 0 0 auto;         /* Prevent stretching */
+      width: 120px;
     }
-
 
     .generate-btn {
       background-color: #007bff;
       color: white;
+      padding: 8px 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      width: 220px;
     }
 
     .generate-btn:hover {
@@ -67,10 +77,24 @@
     .clear-btn {
       background-color: #dc3545;
       color: white;
+      padding: 8px 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      width: 220px;
     }
 
     .clear-btn:hover {
       background-color: #a71d2a;
+    }
+
+    .help-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .help-btn:hover {
+      background-color: #1e7e34;
     }
 
     .copy-btn {
@@ -96,9 +120,19 @@
 
     @media (max-width: 480px) {
       button {
-        width: 200px;         /* Even smaller on tiny devices */
+        width: 200px;
         font-size: 13px;
         padding: 8px;
+      }
+
+      .top-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .top-buttons button {
+        width: 100%;
       }
     }
 
@@ -106,8 +140,11 @@
 </head>
 <body>
 
-  
-  <button style="background-color: #676060; width: 80px;" class="generate-btn" onclick="window.open('https://github.com/shahidulalam447/copy-lines-tool', '_blank')">Show Project</button>
+  <div class="top-buttons">
+    <button class="generate-btn" onclick="window.open('https://github.com/shahidulalam447/copy-lines-tool', '_blank')">Show Project</button>
+    <button class="help-btn" onclick="showHelp()">সহায়তা</button>
+  </div>
+
   <h2>Copy Each Line Individually</h2>
 
   <textarea id="inputText" placeholder="Write lines here..."></textarea>
@@ -163,6 +200,10 @@
       document.getElementById("inputText").value = '';
       document.getElementById("buttonsContainer").innerHTML = '';
       localStorage.removeItem("savedLines");
+    }
+
+    function showHelp() {
+      alert("এই অ্যাপ্লিকেশনটির মাধ্যমে আপনি আপনার লেখা প্রতিটি লাইন আলাদাভাবে কপি করার জন্য বাটন তৈরি করতে পারবেন। নিচে লেখা 'Generate Copy Buttons' চাপুন, এরপর প্রতিটি লাইন বাটন হিসেবে পাবেন। তৈরিকৃত প্রতিটি বাটনে ক্লিক করে আলাদা আলাদা কপি করতে পারবেন, যা আপনার clipboard এ সংরক্ষিত থাকবে। 'Clear All' দিয়ে সব মুছে ফেলতে পারবেন।");
     }
   </script>
 
