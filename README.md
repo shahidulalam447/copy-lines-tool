@@ -7,7 +7,7 @@ A simple web tool that allows you to input multiline text, then generate a copy 
 ## ✨ Features
 
 - Input multiple lines of text.
-- Generate a separate "Copy Line" button for each line.
+- Generate a separate button for each line.
 - Each button copies that line to the clipboard.
 - Built with HTML, CSS, and JavaScript.
 - No frameworks, no dependencies – lightweight and fast!
@@ -18,4 +18,6 @@ A simple web tool that allows you to input multiline text, then generate a copy 
 
 👉 **[Click here to use the tool](https://shahidulalam447.github.io/copy-lines-tool/)**  
 🔗 *Opens in new tab (right-click or Ctrl+Click recommended)*
+
+![Demo](https://github.com/shahidulalam447/copy-lines-tool/blob/master/screencapture.png)
 
