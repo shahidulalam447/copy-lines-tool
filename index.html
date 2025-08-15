@@ -4,18 +4,15 @@
   <meta charset="UTF-8">
   <title>Line-by-Line Copy Tool</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.1.4/dist/tesseract.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       font-family: "Segoe UI", sans-serif;
       padding: 20px;
       background-color: #f0f4f8;
       margin: 0;
     }
-
     h2 {
       text-align: center;
       margin-bottom: 20px;
@@ -24,7 +21,6 @@
       color: #ffffff; 
       padding: 10px;
     }
-
     textarea {
       width: 100%;
       height: 150px;
@@ -34,7 +30,6 @@
       border-radius: 6px;
       resize: vertical;
     }
-
     .btn-group {
       margin: 15px 0;
       display: flex;
@@ -42,14 +37,12 @@
       justify-content: center;
       gap: 10px;
     }
-
     .top-buttons {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
     }
-
     .top-buttons button {
       padding: 8px 12px;
       font-size: 16px;
@@ -59,7 +52,6 @@
       transition: 0.2s;
       width: 120px;
     }
-
     .generate-btn {
       background-color: #007bff;
       color: white;
@@ -69,11 +61,7 @@
       border-radius: 6px;
       width: 220px;
     }
-
-    .generate-btn:hover {
-      background-color: #0056b3;
-    }
-
+    .generate-btn:hover { background-color: #0056b3; }
     .clear-btn {
       background-color: #dc3545;
       color: white;
@@ -83,20 +71,9 @@
       border-radius: 6px;
       width: 220px;
     }
-
-    .clear-btn:hover {
-      background-color: #a71d2a;
-    }
-
-    .help-btn {
-      background-color: #28a745;
-      color: white;
-    }
-
-    .help-btn:hover {
-      background-color: #1e7e34;
-    }
-
+    .clear-btn:hover { background-color: #a71d2a; }
+    .help-btn { background-color: #28a745; color: white; }
+    .help-btn:hover { background-color: #1e7e34; }
     .copy-btn {
       display: block;
       width: 100%;
@@ -109,33 +86,18 @@
       margin-bottom: 10px;
       transition: background-color 0.3s;
     }
-
-    .copy-btn:hover {
-      background-color: #f1f1f1;
+    .copy-btn:hover { background-color: #f1f1f1; }
+    .copied { background-color: #c8f7c5 !important; }
+    .loading {
+      color: #ff6600;
+      font-weight: bold;
+      margin-top: 10px;
     }
-
-    .copied {
-      background-color: #c8f7c5 !important;
-    }
-
     @media (max-width: 480px) {
-      button {
-        width: 200px;
-        font-size: 13px;
-        padding: 8px;
-      }
-
-      .top-buttons {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-
-      .top-buttons button {
-        width: 100%;
-      }
+      button { width: 200px; font-size: 13px; padding: 8px; }
+      .top-buttons { flex-direction: column; align-items: stretch; gap: 10px; }
+      .top-buttons button { width: 100%; }
     }
-
   </style>
 </head>
 <body>
@@ -148,6 +110,12 @@
   <h2>Copy Each Line Individually</h2>
 
   <textarea id="inputText" placeholder="Write lines here..."></textarea>
+
+  <!-- ইমেজ আপলোড -->
+  <div style="margin: 10px 0;">
+    <input type="file" id="imageInput" accept="image/*" onchange="extractTextFromImage()">
+    <div id="loadingMsg" class="loading" style="display:none;">⏳ ইমেজ থেকে লেখা পড়া হচ্ছে...</div>
+  </div>
 
   <div class="btn-group">
     <button class="generate-btn" onclick="generateLineButtons()">Generate Copy Buttons</button>
@@ -197,13 +165,46 @@
     }
 
     function clearAll() {
-      document.getElementById("inputText").value = '';
-      document.getElementById("buttonsContainer").innerHTML = '';
-      localStorage.removeItem("savedLines");
+    // টেক্সট বক্স ক্লিয়ার
+    document.getElementById("inputText").value = '';
+
+    // কপি বাটন ক্লিয়ার
+    document.getElementById("buttonsContainer").innerHTML = '';
+
+    // লোকাল স্টোরেজ ক্লিয়ার
+    localStorage.removeItem("savedLines");
+
+    // ইমেজ ইনপুট রিসেট
+    document.getElementById("imageInput").value = '';
+
+    // লোডিং মেসেজ হাইড
+    document.getElementById("loadingMsg").style.display = "none";
     }
 
+
     function showHelp() {
-      alert("এই অ্যাপ্লিকেশনটির মাধ্যমে আপনি আপনার লেখা প্রতিটি লাইন আলাদাভাবে কপি করার জন্য বাটন তৈরি করতে পারবেন। নিচে লেখা 'Generate Copy Buttons' চাপুন, এরপর প্রতিটি লাইন বাটন হিসেবে পাবেন। তৈরিকৃত প্রতিটি বাটনে ক্লিক করে আলাদা আলাদা কপি করতে পারবেন, যা আপনার clipboard এ সংরক্ষিত থাকবে। 'Clear All' দিয়ে সব মুছে ফেলতে পারবেন।");
+      alert("এই অ্যাপ্লিকেশনটির মাধ্যমে আপনি আপনার লেখা প্রতিটি লাইন আলাদাভাবে কপি করার জন্য বাটন তৈরি করতে পারবেন।\n\nনতুন ফিচার: এখন ছবি আপলোড দিলে ছবির লেখা সরাসরি টেক্সট বক্সে বসে যাবে।");
+    }
+
+    // ইমেজ থেকে টেক্সট নেওয়া
+    function extractTextFromImage() {
+      const file = document.getElementById("imageInput").files[0];
+      if (!file) return;
+
+      const loadingMsg = document.getElementById("loadingMsg");
+      loadingMsg.style.display = "block"; // লোডিং দেখানো শুরু
+
+      Tesseract.recognize(file, 'eng+ben', { logger: info => console.log(info) })
+        .then(({ data: { text } }) => {
+          document.getElementById("inputText").value = text.trim();
+        })
+        .catch(err => {
+          console.error(err);
+          alert("ইমেজ থেকে লেখা পড়তে সমস্যা হয়েছে!");
+        })
+        .finally(() => {
+          loadingMsg.style.display = "none"; // লোডিং বন্ধ
+        });
     }
   </script>
 
